@@ -1,6 +1,7 @@
 const express = require ('express')
 const path = require('path')
 const checkListRouter = require('./src/routes/checklist')
+const taskRouter = require('./src/routes/task')
 const rootRouter = require('./src/routes/index')
 const methodOverride = require('method-override')
 require('./config/database')
@@ -14,8 +15,10 @@ app.use(express.static(path.join(__dirname, 'public'))) //Arquivos estáticos v�
 app.set('views', path.join(__dirname, 'src/views')) //Estou dizendo que as views estão em src/views
 app.set('view engine', 'ejs')
 
-app.use('/',rootRouter) // Coloco o /checklists aqui e não preciso colocar no routes, Isso é um middleware! Todo app.use() recebe como param um middleware, ali em cima inclusive express.json() é um 
+app.use('/',rootRouter) // Coloco o /checklists aqui e não preciso colocar no routes, Isso é um middleware! Todo app.use() recebe como param um middleware
 app.use('/checklists',checkListRouter)
+app.use('/checklists',taskRouter.checklistDependent)
+app.use('/tasks', taskRouter.simple)
 
 app.listen(3000, () => {
     console.log("Servidor iniciado!")
